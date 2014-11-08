@@ -9,8 +9,8 @@ public class Main {
 		Token xPayToken = new Token();
 
 		String token = xPayToken.buildHash(args[0],args[1]);
-
-		System.out.println("token: " + token);
+		
+		System.out.println("xpay token is : " + token);
 	}
 
 }
