@@ -1,13 +1,17 @@
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class Token {
 	String userRequest;
 
-	String buildHash(){
+	String buildHash(String sharedSecretArg, String apikeyArg){
 
 	    String sourceString = ""; // shared secret + fields in correct format
-	    String hash="";
-	    String sharedSecret="FCZvnD}2ikdBhZmrpaOSIya0+m2/Sj{Mpv@L+OOT";
-	    String apikey="W869FJ62VVNYBVY73Q3621Jyljzif9DbVYRuY_6wNjyDMubq4";
+	    
+	    String sharedSecret = sharedSecretArg;
+	    String apikey = apikeyArg;
 	    String resourcePath="cd/ForExInquiry";
 	    userRequest= "{"+
 	                    "\"SystemsTraceAuditNumber\": 451012,"+
@@ -39,7 +43,22 @@ public class Token {
 	    sourceString = sharedSecret + timeStamp + resourcePath + userRequest;
 	    
 	    //I Know, I still need to add the Library
-	    hash = CryptoJS.SHA256(sourceString);
+	    
+	    MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    try {
+			md.update(sourceString.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // Change this to "UTF-16" if needed
+	    byte[] hash = md.digest();
 
 	    String xpayToken = "x:"+timeStamp+":"+hash;
 
@@ -49,14 +68,6 @@ public class Token {
 
 	    return xpayToken;
 
-	    //String base64String = new Buffer(hash).toString('base64');
-
-
-
-	    /*
-	    String crypto = require('crypto');
-	    String hash = crypto.createHash('sha256').update(sourceString).digest('base64');
-	    */
 
 	}
 
