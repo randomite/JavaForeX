@@ -10,7 +10,7 @@ public class Main {
 
 		String token = xPayToken.buildHash(args[0],args[1]);
 
-		System.out.println(token);
+		System.out.println("token: " + token);
 	}
 
 }
